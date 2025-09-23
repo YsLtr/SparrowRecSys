@@ -14,11 +14,38 @@
         <spark.version>2.4.3</spark.version>
         <flink.version>1.11.1</flink.version>
         <scala.version>2.11</scala.version>
+        <hadoop.version>2.7.7</hadoop.version>
         <httpclient.version>4.5.8</httpclient.version>
         <httpasyncclient.version>4.1.4</httpasyncclient.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
+    <!-- 统一依赖版本管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-common</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-client</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-mapreduce-client-core</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>25.1-jre</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <!-- 构建配置 -->
     <build>
@@ -27,9 +54,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
 
@@ -48,25 +76,31 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                 </configuration>
-
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- 用于继承合并 -->
-                        <phase>package</phase> <!-- 绑定到打包阶段 -->
+                        <id>make-assembly</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version> <!-- 建议锁定一个稳定版本 -->
+                <configuration>
+                    <mainClass>com.sparrowrecsys.online.RecSysServer</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <!-- 项目依赖 -->
     <dependencies>
-
         <!-- 在线库 -->
-        <!-- Jetty 服务器 -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
@@ -80,35 +114,29 @@
         </dependency>
 
         <!-- 离线库 -->
-        <!-- Spark 核心库 -->
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
 
-        <!-- Spark SQL -->
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
-
-        <!-- Spark MLLib -->
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_${scala.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
 
-        <!-- MLeap 运行时 -->
+        <!-- MLeap -->
         <dependency>
             <groupId>ml.combust.mleap</groupId>
             <artifactId>mleap-runtime_2.11</artifactId>
             <version>0.12.0</version>
         </dependency>
-
-        <!-- MLeap Spark -->
         <dependency>
             <groupId>ml.combust.mleap</groupId>
             <artifactId>mleap-spark_2.11</artifactId>
@@ -122,35 +150,40 @@
             <version>2.0</version>
         </dependency>
 
-        <!-- JPMML SparkML -->
+        <!-- JPMML -->
         <dependency>
             <groupId>org.jpmml</groupId>
             <artifactId>jpmml-sparkml</artifactId>
             <version>1.4.6</version>
         </dependency>
-
-        <!-- PMML 评估器 -->
         <dependency>
             <groupId>org.jpmml</groupId>
             <artifactId>pmml-evaluator</artifactId>
             <version>1.4.3</version>
         </dependency>
 
-        <!-- Hadoop 公共库 -->
+        <!-- Hadoop -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
-            <version>2.7.7</version>
+            <exclusions>
+                <!-- 解决与Jetty的servlet-api版本冲突 -->
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-
-        <!-- Hadoop MapReduce 客户端核心库 -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-mapreduce-client-core</artifactId>
-            <version>2.7.7</version>
         </dependency>
 
-        <!-- Jedis (Redis 客户端) -->
+        <!-- Jedis -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
@@ -162,40 +195,21 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
             <version>${httpclient.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>${httpclient.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
             <version>${httpasyncclient.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Spark Hive -->
@@ -211,14 +225,14 @@
             </exclusions>
         </dependency>
 
-        <!-- JSON 库 -->
+        <!-- JSON -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20200518</version>
         </dependency>
 
-        <!-- Flink Java -->
+        <!-- Flink -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-java</artifactId>
@@ -234,6 +248,5 @@
             <artifactId>flink-clients_2.11</artifactId>
             <version>${flink.version}</version>
         </dependency>
-
     </dependencies>
 </project>
