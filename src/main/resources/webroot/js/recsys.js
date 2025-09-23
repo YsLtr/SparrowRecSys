@@ -1,6 +1,6 @@
 
 
- function appendMovie2Row(rowId, movieName, movieId, year, rating, rateNumber, genres, baseUrl) {
+function appendMovie2Row(rowId, movieName, movieId, year, rating, rateNumber, genres, baseUrl) {
 
     var genresStr = "";
     $.each(genres, function(i, genre){
@@ -97,9 +97,9 @@ function addRowFrameWithoutLink(pageId, rowName, rowId, baseUrl) {
      $(pageId).prepend(divstr);
 };
 
-function addGenreRow(pageId, rowName, rowId, size, baseUrl) {
+function addGenreRow(pageId, rowName, rowId, size, sortBy, baseUrl) {
     addRowFrame(pageId, rowName, rowId, baseUrl);
-    $.getJSON(baseUrl + "getrecommendation?genre="+rowName+"&size="+size+"&sortby=rating", function(result){
+    $.getJSON(baseUrl + "getrecommendation?genre="+rowName+"&size="+size+"&sortby="+sortBy, function(result){
         $.each(result, function(i, movie){
           appendMovie2Row(rowId, movie.title, movie.movieId, movie.releaseYear, movie.averageRating.toPrecision(2), movie.ratingNumber, movie.genres,baseUrl);
         });
