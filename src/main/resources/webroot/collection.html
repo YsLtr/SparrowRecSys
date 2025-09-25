@@ -141,7 +141,7 @@ var currentCategory = "";
 var windowLocation = window.location;
 var type = getQueryString("type",windowLocation);
 var value = getQueryString("value",windowLocation);
-var baseUrl = windowLocation.protocol + "//" + windowLocation.host + "/"
+var baseUrl = "/";
 
 // 页面加载时设置选择器的值为当前排序方式并加载电影列表
 $(document).ready(function() {
