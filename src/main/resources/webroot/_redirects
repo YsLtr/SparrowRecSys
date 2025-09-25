@@ -1,0 +1,7 @@
+/api/* https://sparrow.ysltr.de:80/api/:splat 200
+/getrecommendation https://sparrow.ysltr.de:80/getrecommendation 200
+/getsimilarmovie https://sparrow.ysltr.de:80/getsimilarmovie 200
+/getuser https://sparrow.ysltr.de:80/getuser 200
+/getmovie https://sparrow.ysltr.de:80/getmovie 200
+/getrecforyou https://sparrow.ysltr.de:80/getrecforyou 200
+/* /index.html 200
