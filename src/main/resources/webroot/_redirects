@@ -1,7 +1,7 @@
-/api/* https://sparrow.ysltr.de/api/:splat 200
-/getrecommendation https://sparrow.ysltr.de/getrecommendation 200
-/getsimilarmovie https://sparrow.ysltr.de/getsimilarmovie 200
-/getuser https://sparrow.ysltr.de/getuser 200
-/getmovie https://sparrow.ysltr.de/getmovie 200
-/getrecforyou https://sparrow.ysltr.de/getrecforyou 200
+/api/* http://sparrow.ysltr.de/api/:splat 200
+/getrecommendation http://sparrow.ysltr.de/getrecommendation 200
+/getsimilarmovie http://sparrow.ysltr.de/getsimilarmovie 200
+/getuser http://sparrow.ysltr.de/getuser 200
+/getmovie http://sparrow.ysltr.de/getmovie 200
+/getrecforyou http://sparrow.ysltr.de/getrecforyou 200
 /* /index.html 200
