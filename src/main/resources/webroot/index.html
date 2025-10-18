@@ -128,12 +128,12 @@ $(document).ready(function() {
     $("#sort-selector").val(currentSortBy);
     
     // 加载电影列表
-    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl);
+    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl, 0);
 });
 
 function changeSortMethod() {
@@ -150,12 +150,12 @@ function changeSortMethod() {
     $("#adventure-collection").empty();
     
     // 重新加载数据
-    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl);
-    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl);
+    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl, 1);
 }
 
 </script>

@@ -97,7 +97,8 @@ function addRowFrameWithoutLink(pageId, rowName, rowId, baseUrl) {
      $(pageId).prepend(divstr);
 };
 
-function addGenreRow(pageId, rowName, rowId, size, sortBy, baseUrl) {
+function addGenreRow(pageId, rowName, rowId, size, sortBy, baseUrl, reload) {
+    if(!reload)
     addRowFrame(pageId, rowName, rowId, baseUrl);
     $.getJSON(baseUrl + "getrecommendation?genre="+rowName+"&size="+size+"&sortby="+sortBy, function(result){
         $.each(result, function(i, movie){
