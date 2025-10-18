@@ -4,4 +4,5 @@
 /getuser https://sparrow.ysltr.de/getuser 200
 /getmovie https://sparrow.ysltr.de/getmovie 200
 /getrecforyou https://sparrow.ysltr.de/getrecforyou 200
+/getmodel https://sparrow.ysltr.de/getmodel 200
 /* /index.html 200
