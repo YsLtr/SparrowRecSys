@@ -1,4 +1,124 @@
+var getUrl = window.location;
+var baseUrl = getUrl .protocol + "//" + getUrl.host + "/"
+// 从localStorage中获取排序方式，如果没有则默认为rating
+var currentSortBy = localStorage.getItem("sortBy") || "rating";
 
+var ModelManager = {
+    // 初始化模型管理器
+    init: function() {
+        this.loadModelList();
+    },
+
+    // 加载模型列表
+    loadModelList: function() {
+        $.ajax({
+            url: '/getmodel?action=list',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    ModelManager.renderModelList(data.models, data.currentModel);
+                } else {
+                    ModelManager.showStatus('error', '加载模型列表失败: ' + data.message);
+                }
+            },
+            error: function() {
+                ModelManager.showStatus('error', '无法连接到服务器');
+            }
+        });
+    },
+
+    // 渲染模型列表
+    renderModelList: function(models) {
+        var modelSelector = $('#model-selector');
+        modelSelector.empty(); // 清空现有选项
+
+        models.forEach(function(model) {
+            var option = $('<option></option>')
+                .val(model.version) // 设置 option 的 value
+                .text(model.displayName); // 设置 option 的显示文本
+
+            if (model.isCurrent) {
+                option.prop('selected', true); // 设置当前选中的模型
+            }
+
+            modelSelector.append(option);
+        });
+    },
+
+    // 切换模型
+    switchModel: function(version) {
+        this.showStatus('info', '正在切换模型，请稍候...');
+
+        $.ajax({
+            url: '/getmodel',
+            type: 'POST',
+            data: {
+                action: 'switch',
+                version: version
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    ModelManager.showStatus('success', data.message);
+                    // 重新加载模型列表以更新当前状态
+                    setTimeout(function() {
+                        ModelManager.loadModelList();
+                    }, 1000);
+                } else {
+                    ModelManager.showStatus('error', '模型切换失败: ' + data.message);
+                }
+            },
+            error: function() {
+                ModelManager.showStatus('error', '模型切换请求失败');
+            }
+        });
+    },
+
+    /**
+     * 显示状态消息 (全新版本，支持通知堆叠)
+     * @param {string} type - 消息类型 (success, error, info, warning)
+     * @param {string} message - 要显示的消息内容
+     * @param {boolean} persistent - 如果为true，通知将不会自动消失 (用于错误消息)
+     */
+    showStatus: function(type, message) {
+        const container = $('#notification-container');
+        const alertDiv = $('<div></div>');
+
+        alertDiv.addClass('status-alert');
+        switch(type) {
+            case 'success': alertDiv.addClass('alert-success'); break;
+            case 'error':   alertDiv.addClass('alert-danger'); break;
+            case 'warning': alertDiv.addClass('alert-warning'); break;
+            default:        alertDiv.addClass('alert-info'); break;
+        }
+
+        alertDiv.html(`
+        <span>${message}</span>
+        <button type="button" class="close">&times;</button>
+    `);
+
+        // 关键变更：将新创建的通知添加到容器的底部
+        // 之前是 .prepend()
+        container.append(alertDiv);
+
+        // 封装一个移除函数，包含新的离场动画
+        const removeAlert = () => {
+            alertDiv.addClass('fading-out');
+            // 等待动画结束后再从DOM中移除元素
+            // 动画时长为 0.4s，这里可以稍微长一点以确保动画播完
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 400);
+        };
+
+        alertDiv.find('.close').on('click', removeAlert);
+
+        if (type !== 'error') {
+            setTimeout(removeAlert, 5000);
+        }
+    },
+};
 
 function appendMovie2Row(rowId, movieName, movieId, year, rating, rateNumber, genres, baseUrl) {
 
@@ -98,8 +218,10 @@ function addRowFrameWithoutLink(pageId, rowName, rowId, baseUrl) {
 };
 
 function addGenreRow(pageId, rowName, rowId, size, sortBy, baseUrl, reload) {
-    if(!reload)
-    addRowFrame(pageId, rowName, rowId, baseUrl);
+    if (reload) {
+    } else {
+        addRowFrame(pageId, rowName, rowId, baseUrl);
+    }
     $.getJSON(baseUrl + "getrecommendation?genre="+rowName+"&size="+size+"&sortby="+sortBy, function(result){
         $.each(result, function(i, movie){
           appendMovie2Row(rowId, movie.title, movie.movieId, movie.releaseYear, movie.averageRating.toPrecision(2), movie.ratingNumber, movie.genres,baseUrl);
@@ -291,6 +413,43 @@ function addUserDetails(containerId, userId, baseUrl) {
     });
 };
 
+function changeSortMethod() {
+    currentSortBy = $("#sort-selector").val();
+    // 将排序方式保存到localStorage
+    localStorage.setItem("sortBy", currentSortBy);
+
+    // 清空现有行
+    $("#action-collection").empty();
+    $("#romance-collection").empty();
+    $("#thriller-collection").empty();
+    $("#comedy-collection").empty();
+    $("#drama-collection").empty();
+    $("#adventure-collection").empty();
+
+    // 重新加载数据
+    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl, 1);
+    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl, 1);
+}
+
+// 页面加载时设置选择器的值为当前排序方式并加载电影列表
+$(document).ready(function() {
+
+    ModelManager.init();
+    // 设置排序选择器的值
+    $("#sort-selector").val(currentSortBy);
+
+    // 加载电影列表
+    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl, 0);
+    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl, 0);
+});
 
 
 

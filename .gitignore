@@ -29,3 +29,7 @@ target/
 SparrowRecSys.iml
 TFRecModel.iml
 RecPySpark.iml
+/python_embedding/
+/venv/
+/python_embedding/
+/venv/

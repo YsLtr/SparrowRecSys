@@ -50,11 +50,22 @@
                         <option value="popularity">热度</option>
                     </select>
                 </div>
+                <!-- 模型选择器容器 --><div class="sort-options">
+                <span>生成模型: </span>
+                <select id="model-selector" onchange="ModelManager.switchModel(this.value)" class="form-control input-sm no-glow">
+                    <!-- 模型列表将由 JavaScript 动态加载 -->
+                </select>
             </div>
+            </div>
+
         </div>
     </header>
+
     <div class="base-compact-header-spacer"></div>
+
     <div class="ml4-container" style="min-height: 920px;">
+        <!-- 状态提示框 (移除内联样式) -->
+        <div id="notification-container"></div>
         <div id="main-container">
             <div class="frontpage" id="recPage">
                 <div class="frontpage-section-top">
@@ -115,48 +126,4 @@
 </div>
 </body>
 
-<script type="text/javascript">
-
-var getUrl = window.location;
-var baseUrl = getUrl .protocol + "//" + getUrl.host + "/"
-// 从localStorage中获取排序方式，如果没有则默认为rating
-var currentSortBy = localStorage.getItem("sortBy") || "rating";
-
-// 页面加载时设置选择器的值为当前排序方式并加载电影列表
-$(document).ready(function() {
-    // 设置排序选择器的值
-    $("#sort-selector").val(currentSortBy);
-    
-    // 加载电影列表
-    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl, 0);
-    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl, 0);
-    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl, 0);
-    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl, 0);
-    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl, 0);
-    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl, 0);
-});
-
-function changeSortMethod() {
-    currentSortBy = $("#sort-selector").val();
-    // 将排序方式保存到localStorage
-    localStorage.setItem("sortBy", currentSortBy);
-    
-    // 清空现有行
-    $("#action-collection").empty();
-    $("#romance-collection").empty();
-    $("#thriller-collection").empty();
-    $("#comedy-collection").empty();
-    $("#drama-collection").empty();
-    $("#adventure-collection").empty();
-    
-    // 重新加载数据
-    addGenreRow('#recPage', 'Action', 'action-collection', 8, currentSortBy, baseUrl, 1);
-    addGenreRow('#recPage', 'Romance', 'romance-collection', 8, currentSortBy, baseUrl, 1);
-    addGenreRow('#recPage', 'Thriller', 'thriller-collection', 8, currentSortBy, baseUrl, 1);
-    addGenreRow('#recPage', 'Comedy', 'comedy-collection', 8, currentSortBy, baseUrl, 1);
-    addGenreRow('#recPage', 'Drama', 'drama-collection', 8, currentSortBy, baseUrl, 1);
-    addGenreRow('#recPage', 'Adventure', 'adventure-collection', 8, currentSortBy, baseUrl, 1);
-}
-
-</script>
 </html>

@@ -34,6 +34,7 @@ package com.sparrowrecsys.online;
 
 import com.sparrowrecsys.online.datamanager.DataManager;
 import com.sparrowrecsys.online.service.*;
+import com.sparrowrecsys.online.service.ModelService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -99,6 +100,7 @@ public class RecSysServer {
         context.addServlet(new ServletHolder(new SimilarMovieService()), "/getsimilarmovie");
         context.addServlet(new ServletHolder(new RecommendationService()), "/getrecommendation");
         context.addServlet(new ServletHolder(new RecForYouService()), "/getrecforyou");
+        context.addServlet(new ServletHolder(new ModelService()), "/getmodel");
 
         // 设置 URL 处理器
         server.setHandler(context);
