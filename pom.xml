@@ -91,9 +91,20 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.2.0</version> <!-- 建议锁定一个稳定版本 -->
-                <configuration>
-                    <mainClass>com.sparrowrecsys.online.RecSysServer</mainClass>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>redis-migrate</id>
+                        <configuration>
+                            <mainClass>com.sparrowrecsys.online.util.RedisDataMigrator</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>run-server</id>
+                        <configuration>
+                            <mainClass>com.sparrowrecsys.online.RecSysServer</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
