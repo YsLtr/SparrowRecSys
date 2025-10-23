@@ -23,13 +23,18 @@
 hs_err_pid*
 
 .idea
+.vscode
 .DS_store
 data
 target/
 SparrowRecSys.iml
 TFRecModel.iml
 RecPySpark.iml
-/python_embedding/
 /venv/
-/python_embedding/
-/venv/
+python_embedding/cache
+python_embedding/sparrow_data
+python_embedding/ml-25m
+python_embedding/embeddings
+
+backup_original_models
+backup_original_data

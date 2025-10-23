@@ -137,7 +137,7 @@ function appendMovie2Row(rowId, movieName, movieId, year, rating, rateNumber, ge
                          <a uisref="base.movie" href="./movie.html?movieId='+movieId+'">\
                          <span>\
                            <div class="poster">\
-                            <img src="./posters/' + movieId + '.jpg" />\
+                            <img src="' + getPosterUrl(movieId) + '" onerror="handlePosterError(this, ' + movieId + ')" />\
                            </div>\
                            </span>\
                            </a>\
@@ -326,7 +326,7 @@ function addMovieDetails(containerId, movieId, baseUrl) {
 
         var movieDetails = '<div class="row movie-details-header movie-details-block">\
                                         <div class="col-md-2 header-backdrop">\
-                                            <img alt="movie backdrop image" height="250" src="./posters/'+movieObject.movieId+'.jpg">\
+                                            <img alt="movie backdrop image" height="250" src="' + getPosterUrl(movieObject.movieId) + '" onerror="handlePosterError(this, ' + movieObject.movieId + ')">\
                                         </div>\
                                         <div class="col-md-9"><h1 class="movie-title"> '+movieObject.title+' </h1>\
                                             <div class="row movie-highlights">\

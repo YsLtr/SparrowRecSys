@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>海报系统测试</title>
+    <script src="./js/poster-links.js"></script>
+    <style>
+        .poster-test { display: inline-block; margin: 10px; text-align: center; }
+        .poster-test img { width: 154px; height: 231px; border: 1px solid #ccc; }
+        .poster-info { margin-top: 5px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>电影海报系统测试</h1>
+    <div id="poster-container"></div>
+    
+    <script>
+        // 测试不同范围的电影ID
+        var testMovieIds = [1, 500, 1001, 5000, 10000, 20000, 24000];
+        var container = document.getElementById('poster-container');
+        
+        testMovieIds.forEach(function(movieId) {
+            var posterDiv = document.createElement('div');
+            posterDiv.className = 'poster-test';
+            
+            var img = document.createElement('img');
+            img.src = getPosterUrl(movieId);
+            img.onerror = function() { handlePosterError(this, movieId); };
+            
+            var info = document.createElement('div');
+            info.className = 'poster-info';
+            info.innerHTML = '电影ID: ' + movieId;
+            
+            posterDiv.appendChild(img);
+            posterDiv.appendChild(info);
+            container.appendChild(posterDiv);
+        });
+    </script>
+</body>
+</html>
