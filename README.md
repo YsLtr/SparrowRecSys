@@ -4,6 +4,22 @@ SparrowRecSys是一个电影推荐系统，名字SparrowRecSys（麻雀推荐系
 ## 基于SparrowRecSys的实践课程
 受极客时间邀请开设 [深度学习推荐系统实战](http://gk.link/a/10lyE) 课程，详细讲解了SparrowRecSys的所有技术细节，覆盖了深度学习模型结构，模型训练，特征工程，模型评估，模型线上服务及推荐服务器内部逻辑等模块。
 
+
+# DATA文件位置
+http://armbian.ysltr.de:8081/tLgiCOae1R/DATA.7z
+
+DATA/item2vecEmb.csv DATA/item2vecEmb_large.csv DATA/userEmb.csv DATA/userEmb_large.csv --> src/main/resources/webroot/modeldata
+
+DATA/trainingSamples.csv DATA/links.csv DATA/modelSamples.csv DATA/movies.csv DATA/ratings.csv DATA/testSamples.csv --> src/main/resources/webroot/sampledata
+
+```bash
+# 移动模型数据文件
+mv DATA/item2vecEmb.csv DATA/item2vecEmb_large.csv DATA/userEmb.csv DATA/userEmb_large.csv src/main/resources/webroot/modeldata/
+
+# 移动样本数据文件
+mv DATA/trainingSamples.csv DATA/links.csv DATA/movies.csv DATA/ratings.csv DATA/testSamples.csv src/main/resources/webroot/sampledata/
+```
+
 ## 环境要求
 * Java 8
 * Scala 2.11
