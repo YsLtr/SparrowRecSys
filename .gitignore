@@ -40,3 +40,6 @@ backup_original_models
 backup_original_data
 DATA
 DATA.7z
+
+src/main/resources/webroot/sampledata
+src/main/resources/webroot/modeldata
